@@ -26,6 +26,16 @@ pipeline {
 		 }
             }//parallel
  } //stage
+
+        stage('Deploy') {
+ when {
+ expression { env.GIT_BRANCH == 'origin/main' }
+ }
+ steps {
+ echo 'Deploying...'
+ }
+ }
+
 }//stages
 
 }//pipline
