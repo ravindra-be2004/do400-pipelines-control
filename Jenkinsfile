@@ -3,10 +3,11 @@ pipeline {
  node {
  label 'nodejs'
  }
-   parameters {
+} 
+  parameters {
  booleanParam(name: "RUN_FRONTEND_TESTS", defaultValue: true)
  }
- }
+ 
  stages {
   stage('Run test') {
      parallel {
