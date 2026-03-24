@@ -1,45 +1,13 @@
-pipeline {
- agent {
- node {
- label 'nodejs'
- }
-} 
-  parameters {
- booleanParam(name: "RUN_FRONTEND_TESTS", defaultValue: true)
- }
- 
- stages {
-  stage('Run test') {
-     parallel {
-        
-         stage('Backend Tests') {
-		 steps {
-		 sh 'node ./backend/test.js'
-		 }
-		 }
-	 stage('Frontend Tests') {
-		when { expression { params.RUN_FRONTEND_TESTS } }
-
-		 steps {
-		 sh 'node ./frontend/test.js'
-		 }
-		 }
-            }//parallel
- } //stage
-
-        stage('Deploy') {
- when {
- expression { env.GIT_BRANCH == 'origin/main' }
-  beforeInput true
- }
- input {
- message 'Deploy the application?'
- }
- steps {
- echo 'Deploying...'
- }
+node('nodejs') {
+ stage('Checkout') {
+ git branch: 'main', url: 'https://github.com/ravindra-be2004/do400-pipelines-control'
  }
 
-}//stages
+stage('Backend Tests') {
+ sh 'node ./backend/test.js'
+ }
+ stage('Frontend Tests') {
+  sh 'node ./frontend/test.js'
+ }
 
-}//pipline
+}
